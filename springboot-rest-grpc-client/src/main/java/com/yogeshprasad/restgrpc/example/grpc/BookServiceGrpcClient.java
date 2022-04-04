@@ -17,8 +17,9 @@ import com.yogeshprasad.restgrpc.example.BookServiceGrpc;
 public class BookServiceGrpcClient {
 
     public BookList createBooks(List<Book> bookList) {
+        String serverHost = System.getProperty("BOOK_SERVICE_HOST", "localhost");
         ManagedChannel channel = ManagedChannelBuilder
-            .forAddress("localhost", 6565)
+            .forAddress(serverHost, 6565)
             .usePlaintext()
             .build();
 

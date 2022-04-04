@@ -14,10 +14,11 @@ public class BookRestController {
 
     @RequestMapping("/test_rest")
     public List<Book> testVerbose() {
+        String serverHost = System.getProperty("BOOK_SERVICE_HOST", "localhost");
         HttpEntity<List<Book>> entity = new HttpEntity<>(TestDataUtil.getRestTestData(), null);
 
         ResponseEntity<List<Book>> responseEntity =
-            new RestTemplate().exchange("http://localhost:8081/book",
+            new RestTemplate().exchange("http://" + serverHost + ":8081/book",
                     HttpMethod.POST, entity, new ParameterizedTypeReference<List<Book>>() {});
 
         return responseEntity.getBody();
