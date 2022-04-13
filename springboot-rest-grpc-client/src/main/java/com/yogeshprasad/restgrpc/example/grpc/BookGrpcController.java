@@ -24,7 +24,7 @@ public class BookGrpcController {
         BookList books = bookServiceGrpcClient.createBooks(TestDataUtil.getGrpcTestData());
 
         if (compact) {
-            return new ResponseEntity<>("Grpc success response from V1", HttpStatus.OK);
+            return new ResponseEntity<>("Grpc success response from V2", HttpStatus.OK);
         } else {
             String jsonString = "";
             try{

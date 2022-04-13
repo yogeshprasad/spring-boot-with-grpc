@@ -1,0 +1,177 @@
+##################################################################################################
+# Bookinfo Server
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookinfo-client
+  labels:
+    app: bookinfo-client
+    service: bookinfo-client
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: bookinfo-client
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-client
+  labels:
+    account: bookinfo-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-client-v1
+  labels:
+    app: bookinfo-client
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-client
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: bookinfo-client
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-client
+      containers:
+        - name: bookinfo-client
+          image: yogeshprasadkurmi/grpc-client:1.1
+          env:
+            - name: BOOK_SERVICE_HOST
+              value: "bookinfo-server"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          securityContext:
+            runAsUser: 1000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-client-v2
+  labels:
+    app: bookinfo-client
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-client
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: bookinfo-client
+        version: v2
+    spec:
+      serviceAccountName: bookinfo-client
+      containers:
+        - name: bookinfo-client
+          image: yogeshprasadkurmi/grpc-client:1.2
+          env:
+            - name: BOOK_SERVICE_HOST
+              value: "bookinfo-server"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          securityContext:
+            runAsUser: 1000
+---
+##################################################################################################
+# Bookinfo Server
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookinfo-server
+  labels:
+    app: bookinfo-server
+    service: bookinfo-server
+spec:
+  ports:
+    - name: http
+      port: 8081
+      targetPort: 8081
+    - name: grpc
+      port: 6565
+      targetPort: 6565
+  selector:
+    app: bookinfo-server
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-server
+  labels:
+    account: bookinfo-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-server-v1
+  labels:
+    app: bookinfo-server
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-server
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: bookinfo-server
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-server
+      containers:
+        - name: bookinfo-server
+          image: yogeshprasadkurmi/grpc-server:1.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+            - containerPort: 6565
+          securityContext:
+            runAsUser: 1000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-server-v2
+  labels:
+    app: bookinfo-server
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-server
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: bookinfo-server
+        version: v2
+    spec:
+      serviceAccountName: bookinfo-server
+      containers:
+        - name: bookinfo-server
+          image: yogeshprasadkurmi/grpc-server:1.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+            - containerPort: 6565
+          securityContext:
+            runAsUser: 1000
+---

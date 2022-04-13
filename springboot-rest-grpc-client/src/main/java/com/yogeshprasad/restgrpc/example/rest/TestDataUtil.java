@@ -10,7 +10,7 @@ public class TestDataUtil {
 
     static {
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             Book book = new Book();
             book.setAuthor(randomString());
             book.setBookType(Book.BookType.COMIC_BOOK);

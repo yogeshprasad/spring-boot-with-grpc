@@ -4,6 +4,8 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,11 @@ import com.yogeshprasad.restgrpc.example.BookServiceGrpc;
 @Slf4j
 public class BookServiceGrpcClient {
 
+    @Autowired
+    private Environment env;
+
     public BookList createBooks(List<Book> bookList) {
-        String serverHost = System.getProperty("BOOK_SERVICE_HOST", "localhost");
+        String serverHost = env.getProperty("BOOK_SERVICE_HOST", "localhost");
         ManagedChannel channel = ManagedChannelBuilder
             .forAddress(serverHost, 6565)
             .usePlaintext()
